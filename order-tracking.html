@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Tracking - Grill N Chill</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-orange: #FF6B35;
+            --secondary-peach: #F7931E;
+            --light-peach: #FFE5B4;
+            --white: #FFFFFF;
+            --dark: #2C2C2C;
+            --light-gray: #F5F5F5;
+            --success: #28a745;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--dark);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary-orange);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--secondary-peach);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            transition: color 0.3s;
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+
+        nav a:hover, nav a.active {
+            background: var(--primary-orange);
+            color: var(--white);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: var(--primary-orange);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-orange);
+            color: var(--primary-orange);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-orange);
+            color: white;
+        }
+
+        .cart-icon {
+            position: relative;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--primary-orange);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Tracking Section */
+        .tracking-section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h1 {
+            font-size: 2.8rem;
+            color: var(--primary-orange);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tracking-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tracking-info {
+            flex: 2;
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .tracking-map {
+            flex: 1;
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            align-self: flex-start;
+            text-align: center;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .order-id {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .order-status {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--primary-orange);
+        }
+
+        .tracking-steps {
+            margin: 40px 0;
+        }
+
+        .tracking-steps h2 {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: var(--dark);
+        }
+
+        .steps-container {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .steps-container::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #ddd;
+        }
+
+        .step {
+            position: relative;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .step-icon {
+            position: absolute;
+            left: -38px;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .step.completed .step-icon {
+            background: var(--success);
+        }
+
+        .step.active .step-icon {
+            background: var(--primary-orange);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .step-info {
+            padding-left: 20px;
+        }
+
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .step.completed .step-title {
+            color: var(--success);
+        }
+
+        .step.active .step-title {
+            color: var(--primary-orange);
+        }
+
+        .step-time {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .step-desc {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .map-placeholder {
+            background: linear-gradient(45deg, var(--primary-orange), var(--secondary-peach));
+            height: 250px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+        }
+
+        .delivery-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .delivery-person {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--light-gray);
+            border-radius: 10px;
+        }
+
+        .delivery-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #777;
+        }
+
+        .delivery-details h4 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .delivery-details p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .contact-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-orange);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .contact-btn:hover {
+            background: #e55a2b;
+        }
+
+        .estimated-time {
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .estimated-time i {
+            color: var(--primary-orange);
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .estimated-time h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .estimated-time p {
+            color: #666;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            color: var(--primary-orange);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary-orange);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-orange);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: inline-block;
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: white;
+            font-size: 18px;
+        }
+
+        .social-icons a:hover {
+            background: var(--primary-orange);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 15px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .tracking-container {
+                flex-direction: column;
+            }
+            
+            .tracking-map {
+                align-self: stretch;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-utensils"></i>
+                    Grill N Chill
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="menu.html">Menu</a></li>
+                        <li><a href="reservation.html">Reservation</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="admin.html">Admin</a></li>
+                    </ul>
+                </nav>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline" onclick="window.location.href='login.html'">Login</button>
+                    <button class="btn btn-primary" onclick="window.location.href='register.html'">Register</button>
+                    <div class="cart-icon" onclick="window.location.href='cart.html'">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Tracking Section -->
+    <section class="tracking-section">
+        <div class="container">
+            <div class="section-title">
+                <h1>Order Tracking</h1>
+                <p>Track your order status in real-time</p>
+            </div>
+            
+            <div class="tracking-container">
+                <div class="tracking-info">
+                    <div class="order-header">
+                        <div class="order-id">Order #GRILL-78945</div>
+                        <div class="order-status">On the Way</div>
+                    </div>
+                    
+                    <div class="tracking-steps">
+                        <h2>Order Progress</h2>
+                        <div class="steps-container">
+                            <div class="step completed">
+                                <div class="step-icon"><i class="fas fa-check"></i></div>
+                                <div class="step-info">
+                                    <div class="step-title">Order Confirmed</div>
+                                    <div class="step-time">June 15, 2025 - 12:45 PM</div>
+                                    <div class="step-desc">Your order has been received and confirmed by our team.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="step completed">
+                                <div class="step-icon"><i class="fas fa-fire"></i></div>
+                                <div class="step-info">
+                                    <div class="step-title">Preparing Your Order</div>
+                                    <div class="step-time">June 15, 2025 - 1:00 PM</div>
+                                    <div class="step-desc">Our chefs are preparing your delicious meal with care.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="step active">
+                                <div class="step-icon"><i class="fas fa-motorcycle"></i></div>
+                                <div class="step-info">
+                                    <div class="step-title">On the Way</div>
+                                    <div class="step-time">June 15, 2025 - 1:30 PM</div>
+                                    <div class="step-desc">Your order is on its way! Our delivery person is bringing it to you.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-icon"><i class="fas fa-home"></i></div>
+                                <div class="step-info">
+                                    <div class="step-title">Delivered</div>
+                                    <div class="step-time">Estimated: 1:55 PM</div>
+                                    <div class="step-desc">Your order will be delivered to your address.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tracking-map">
+                    <h2>Delivery Information</h2>
+                    <div class="map-placeholder">
+                        <i class="fas fa-map-marked-alt"></i> Map View
+                    </div>
+                    
+                    <div class="delivery-info">
+                        <h3>Delivery Person</h3>
+                        <div class="delivery-person">
+                            <div class="delivery-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="delivery-details">
+                                <h4>Michael Johnson</h4>
+                                <p>Delivery ID: DRV-4567</p>
+                                <p>Rating: 4.8 ★</p>
+                            </div>
+                        </div>
+                        
+                        <button class="contact-btn">
+                            <i class="fas fa-phone-alt"></i> Call Delivery Person
+                        </button>
+                        
+                        <button class="btn btn-outline" style="width:100%; margin-top: 10px;">
+                            <i class="fas fa-comment"></i> Send Message
+                        </button>
+                    </div>
+                    
+                    <div class="estimated-time">
+                        <i class="fas fa-clock"></i>
+                        <h3>Estimated Arrival</h3>
+                        <p>25 Minutes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Grill N Chill</h3>
+                    <p>Your destination for the finest grilled specialties in a cozy atmosphere. We're committed to quality, flavor, and exceptional service.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="menu.html">Menu</a></li>
+                        <li><a href="reservation.html">Reservation</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="admin.html">Admin Panel</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Grill Street, Foodville</li>
+                        <li><i class="fas fa-phone"></i> (555) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@grillnchill.com</li>
+                        <li><i class="fas fa-clock"></i> Open Daily: 11:00 AM - 10:00 PM</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 Grill N Chill. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--primary-orange);"></i> for food lovers</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

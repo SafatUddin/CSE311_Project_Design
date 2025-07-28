@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Management - Grill N Chill Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-orange: #FF6B35;
+            --secondary-peach: #F7931E;
+            --light-peach: #FFE5B4;
+            --white: #FFFFFF;
+            --dark: #2C2C2C;
+            --light-gray: #F5F5F5;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--dark);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary-orange);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--secondary-peach);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            transition: color 0.3s;
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+
+        nav a:hover, nav a.active {
+            background: var(--primary-orange);
+            color: var(--white);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: var(--primary-orange);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-orange);
+            color: var(--primary-orange);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-orange);
+            color: white;
+        }
+
+        .cart-icon {
+            position: relative;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--primary-orange);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Admin Section */
+        .admin-section {
+            padding: 40px 0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            color: var(--primary-orange);
+        }
+
+        .filter-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .search-box {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 250px;
+        }
+
+        .admin-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: var(--primary-orange);
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: var(--light-gray);
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        tr:hover {
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            font-size: 1.2rem;
+        }
+
+        .rating-stars {
+            color: #ffc107;
+            font-size: 1.1rem;
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+        }
+
+        .status-approved {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+
+        .status-rejected {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .action-btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-right: 5px;
+            transition: all 0.3s;
+        }
+
+        .btn-view {
+            background: rgba(23, 162, 184, 0.1);
+            color: #17a2b8;
+        }
+
+        .btn-view:hover {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-edit {
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+        }
+
+        .btn-edit:hover {
+            background: #ffc107;
+            color: white;
+        }
+
+        .btn-delete {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .btn-delete:hover {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-approve {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+
+        .btn-approve:hover {
+            background: #28a745;
+            color: white;
+        }
+
+        .review-details {
+            display: none;
+            background: var(--light-gray);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .review-details-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .review-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+
+        .review-content {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+
+        .review-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .review-value {
+            color: var(--dark);
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 10px;
+        }
+
+        .page-btn {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .page-btn:hover, .page-btn.active {
+            background: var(--primary-orange);
+            color: white;
+            border-color: var(--primary-orange);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-modal:hover {
+            color: var(--danger);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            min-height: 100px;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+        }
+
+        .save-btn {
+            padding: 12px 25px;
+            background: var(--primary-orange);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .save-btn:hover {
+            background: #e55a2b;
+        }
+
+        .cancel-btn {
+            padding: 12px 25px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-left: 10px;
+        }
+
+        .cancel-btn:hover {
+            background: #5a6268;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            color: var(--primary-orange);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary-orange);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-orange);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: inline-block;
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: white;
+            font-size: 18px;
+        }
+
+        .social-icons a:hover {
+            background: var(--primary-orange);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 15px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .section-header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .filter-section {
+                justify-content: center;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-utensils"></i>
+                    Grill N Chill
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="menu.html">Menu</a></li>
+                        <li><a href="reservation.html">Reservation</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="admin.html">Admin</a></li>
+                    </ul>
+                </nav>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline" onclick="window.location.href='login.html'">Login</button>
+                    <button class="btn btn-primary" onclick="window.location.href='register.html'">Register</button>
+                    <div class="cart-icon" onclick="window.location.href='cart.html'">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Section -->
+    <section class="admin-section">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">Review Management</h1>
+            </div>
+            
+            <div class="filter-section">
+                <input type="text" class="search-box" placeholder="Search reviews...">
+                <select class="filter-select">
+                    <option>All Reviews</option>
+                    <option>Pending</option>
+                    <option>Approved</option>
+                    <option>Rejected</option>
+                    <option>5 Stars</option>
+                    <option>4 Stars</option>
+                    <option>3 Stars</option>
+                    <option>2 Stars</option>
+                    <option>1 Star</option>
+                </select>
+                <select class="filter-select">
+                    <option>Recently Added</option>
+                    <option>Highest Rated</option>
+                    <option>Lowest Rated</option>
+                </select>
+            </div>
+            
+            <div class="admin-card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-star"></i> Customer Reviews</h2>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Rating</th>
+                                <th>Review</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div class="user-avatar">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div>John Smith</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="rating-stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </td>
+                                <td>Excellent food and service! Highly recommend the grilled salmon.</td>
+                                <td>Jun 16, 2025</td>
+                                <td><span class="status-badge status-approved">Approved</span></td>
+                                <td>
+                                    <button class="action-btn btn-view" onclick="toggleReviewDetails('details-1')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn btn-edit" onclick="openEditReviewModal('John Smith')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn btn-delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" class="review-details" id="details-1">
+                                    <div class="review-details-header">
+                                        <h3>Review Details</h3>
+                                        <div>Review ID: #REV-001</div>
+                                    </div>
+                                    <div class="review-info">
+                                        <div class="info-item">
+                                            <span class="info-label">Customer Name</span>
+                                            <span class="info-value">John Smith</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Rating</span>
+                                            <span class="info-value">
+                                                <div class="rating-stars">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Date</span>
+                                            <span class="info-value">June 16, 2025</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Status</span>
+                                            <span class="info-value"><span class="status-badge status-approved">Approved</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="review-content">
+                                        <div class="review-label">Review Content</div>
+                                        <div class="review-value">
+                                            Excellent food and service! Highly recommend the grilled salmon. 
+                                            The staff was very attentive and the atmosphere was perfect for a 
+                                            romantic dinner. Will definitely be coming back!
+                                        </div>
+                                    </div>
+                                    <div class="review-content">
+                                        <div class="review-label">Response</div>
+                                        <div class="review-value">
+                                            Thank you for your wonderful review, John! We're thrilled to hear 
+                                            you enjoyed our grilled salmon and had a great experience. We look 
+                                            forward to welcoming you back soon!
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div class="user-avatar">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div>Jane Doe</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="rating-stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                </td>
+                                <td>Great food but had to wait a bit long for our order.</td>
+                                <td>Jun 12, 2025</td>
+                                <td><span class="status-badge status-approved">Approved</span></td>
+                                <td>
+                                    <button class="action-btn btn-view" onclick="toggleReviewDetails('details-2')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn btn-edit" onclick="openEditReviewModal('Jane Doe')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn btn-delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" class="review-details" id="details-2">
+                                    <div class="review-details-header">
+                                        <h3>Review Details</h3>
+                                        <div>Review ID: #REV-002</div>
+                                    </div>
+                                    <div class="review-info">
+                                        <div class="info-item">
+                                            <span class="info-label">Customer Name</span>
+                                            <span class="info-value">Jane Doe</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Rating</span>
+                                            <span class="info-value">
+                                                <div class="rating-stars">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Date</span>
+                                            <span class="info-value">June 12, 2025</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Status</span>
+                                            <span class="info-value"><span class="status-badge status-approved">Approved</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="review-content">
+                                        <div class="review-label">Review Content</div>
+                                        <div class="review-value">
+                                            Great food but had to wait a bit long for our order. The grilled 
+                                            chicken wings were delicious and the service was friendly. Just 
+                                            hope the wait time can be improved.
+                                        </div>
+                                    </div>
+                                    <div class="review-content">
+                                        <div class="review-label">Response</div>
+                                        <div class="review-value">
+                                            Thank you for your feedback, Jane. We apologize for the wait time 
+                                            and appreciate your positive comments about our food and service. 
+                                            We're working to improve our efficiency and hope to provide a better 
+                                            experience next time you visit.
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div class="user-avatar">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div>Robert Brown</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="rating-stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                </td>
+                                <td>Food was okay but service could be better.</td>
+                                <td>Jun 8, 2025</td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td>
+                                    <button class="action-btn btn-approve" title="Approve">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="action-btn btn-view" onclick="toggleReviewDetails('details-3')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn btn-delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" class="review-details" id="details-3">
+                                    <div class="review-details-header">
+                                        <h3>Review Details</h3>
+                                        <div>Review ID: #REV-003</div>
+                                    </div>
+                                    <div class="review-info">
+                                        <div class="info-item">
+                                            <span class="info-label">Customer Name</span>
+                                            <span class="info-value">Robert Brown</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Rating</span>
+                                            <span class="info-value">
+                                                <div class="rating-stars">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Date</span>
+                                            <span class="info-value">June 8, 2025</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Status</span>
+                                            <span class="info-value"><span class="status-badge status-pending">Pending</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="review-content">
+                                        <div class="review-label">Review Content</div>
+                                        <div class="review-value">
+                                            Food was okay but service could be better. The grilled salmon was 
+                                            decent but not as good as expected. The waiter seemed distracted 
+                                            and we had to ask for water twice.
+                                        </div>
+                                    </div>
+                                    <div class="review-content">
+                                        <div class="review-label">Response</div>
+                                        <div class="review-value">
+                                            No response yet
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="pagination">
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">Next <i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Edit Review Modal -->
+    <div class="modal" id="editReviewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Respond to Review</h2>
+                <button class="close-modal" onclick="closeReviewModal()">&times;</button>
+            </div>
+            <form id="editReviewForm">
+                <div class="form-group">
+                    <label for="reviewResponse">Response to Customer</label>
+                    <textarea id="reviewResponse" placeholder="Enter your response to the customer..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="reviewStatus">Status</label>
+                    <select id="reviewStatus">
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+                <button type="submit" class="save-btn">Save Response</button>
+                <button type="button" class="cancel-btn" onclick="closeReviewModal()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Grill N Chill</h3>
+                    <p>Your destination for the finest grilled specialties in a cozy atmosphere. We're committed to quality, flavor, and exceptional service.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="menu.html">Menu</a></li>
+                        <li><a href="reservation.html">Reservation</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="admin.html">Admin Panel</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Grill Street, Foodville</li>
+                        <li><i class="fas fa-phone"></i> (555) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@grillnchill.com</li>
+                        <li><i class="fas fa-clock"></i> Open Daily: 11:00 AM - 10:00 PM</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 Grill N Chill. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--primary-orange);"></i> for food lovers</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle review details
+        function toggleReviewDetails(id) {
+            const details = document.getElementById(id);
+            if (details.style.display === 'table-cell') {
+                details.style.display = 'none';
+            } else {
+                // Hide all other details
+                document.querySelectorAll('.review-details').forEach(detail => {
+                    detail.style.display = 'none';
+                });
+                // Show selected details
+                details.style.display = 'table-cell';
+            }
+        }
+        
+        // Open edit review modal
+        function openEditReviewModal(customerName) {
+            document.getElementById('editReviewModal').style.display = 'flex';
+        }
+        
+        // Close review modal
+        function closeReviewModal() {
+            document.getElementById('editReviewModal').style.display = 'none';
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('editReviewModal');
+            if (event.target === modal) {
+                closeReviewModal();
+            }
+        }
+        
+        // Form submission
+        document.getElementById('editReviewForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Review response saved successfully!');
+            closeReviewModal();
+        });
+        
+        // Delete review confirmation
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function() {
+                if (confirm('Are you sure you want to delete this review? This action cannot be undone.')) {
+                    const row = this.closest('tr');
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateX(-20px)';
+                    setTimeout(() => {
+                        row.remove();
+                    }, 300);
+                }
+            });
+        });
+        
+        // Approve review
+        document.querySelectorAll('.btn-approve').forEach(button => {
+            button.addEventListener('click', function() {
+                alert('Review approved successfully!');
+                const statusBadge = this.closest('tr').querySelector('.status-badge');
+                statusBadge.className = 'status-badge status-approved';
+                statusBadge.textContent = 'Approved';
+            });
+        });
+        
+        // Pagination
+        document.querySelectorAll('.page-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.page-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
