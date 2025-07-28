@@ -77,7 +77,7 @@ CREATE TABLE `menuitem` (
 -- Dumping data for table `menuitem`
 --
 
-INSERT INTO `menuitem` (`itemId`, `itemName`, `catName`, `price`, `status`, `description`, `image`, `dateCreated`, `updatedDate`, `is_popular`) VALUES
+INSERT INTO `menuitem` (`itemId`, `itemName`, `catName`, `price`, `status`, `description`, `image`, `dateCreated`, `updatedDate`, `is_popular`)
 
 -- --------------------------------------------------------
 
