@@ -78,22 +78,6 @@ CREATE TABLE `menuitem` (
 --
 
 INSERT INTO `menuitem` (`itemId`, `itemName`, `catName`, `price`, `status`, `description`, `image`, `dateCreated`, `updatedDate`, `is_popular`) VALUES
-(3, 'French Fries', 'Appetizer', '760', 'Unavailable', ' Crispy, golden-brown fries seasoned to perfection, served with your choice of dipping sauces.', 'fries.jpg', '2025-07-26 09:09:35', '2025-07-26 14:39:35', 0),
-(5, 'Veggie Supreme Pizza', 'Pizza', '800', 'Available', 'Our Veggie Supreme Pizza, is loaded with a colorful array of seasonal vegetables, rich tomato sauce, and a generous layer of gooey cheese.', 'veggie-pizza.jpg', '2025-07-26 09:10:36', '2025-07-26 14:40:36', 1),
-(6, 'Prawn Pizza', 'Pizza', '1200', 'Available', 'Dive into our Prawn Pizza, topped with succulent, seasoned prawns, tangy tomato sauce, and a blend of melted cheeses.', 'prawn-piza.jpg', '2025-07-26 09:12:03', '2025-07-26 14:42:03', 0),
-(7, 'Cheese Pizza', 'Pizza', '800', 'Unavailable', 'Indulge in the classic simplicity of our Cheese Pizza, topped with a generous layer of gooey mozzarella and a perfectly seasoned tomato sauce.', 'cheese-pizza.jpg', '2025-07-26 09:13:09', '2025-07-26 14:43:09', 1),
-(8, 'BBQ Chicken Pizza', 'Pizza', '1000', 'Available', 'Savor the smoky goodness of our BBQ Chicken Pizza, featuring tender chicken pieces smothered in barbecue sauce.', 'bbq-pizza.jpg', '2025-07-26 09:13:45', '2025-07-26 14:43:45', 0),
-(9, 'Firebird Burger', 'Burger', '2100', 'Available', 'Crispy fried chicken breast, shredded iceberg lettuce, melted white cheddar, topped with our spicy mayo and sauces on a toasted bun.', 'firebird-burger.jpeg', '2025-07-26 14:37:51', '2025-07-26 16:37:09', 0),
-(10, 'Hybrid Burger', 'Burger', '1800', 'Available', 'Crispy chicken breast, melted white cheddar, char-grilled beef patty, chicken bacon with our signature sauces on a toasted bun.', 'hybrid-burger.jpeg', '2025-07-26 15:07:32', '2025-07-26 17:07:01', 1),
-(11, 'BBQ Chicken Burger', 'Burger', '1900', 'Available', 'Char-grilled beef patty, iceberg lettuce, red onions, melted white cheddar, BBQ sauce topped with our sauces on a toasted bun. ', 'bbq-burger.jpeg', '2025-07-26 15:09:50', '2025-07-26 17:07:34', 1),
-(12, 'Crispy Chicken Burger', 'Burger', '1900', 'Unavailable', 'Marinated crispy fried chicken breast, cheddar cheese, shredded iceberg lettuce topped with our signature mayo and sauces on a toasted bun', 'crispy-burger.jpeg', '2025-07-26 15:21:27', '2025-07-26 17:20:42', 0),
-(13, 'Strawberry Mocktail', 'Beverage', '550', 'Available', 'Refreshingly sweet and tangy, this Strawberry Mocktail blends ripe strawberries with a splash of citrus, creating a vibrant.', 'strawberry-drink.png', '2025-07-26 14:18:11', '2025-07-26 16:09:51', 0),
-(14, 'Orange Sizzler', 'Beverage', '350', 'Available', 'Enjoy the zing of our Orange Sizzler, a mix of fresh orange juice with a fizzy twist, perfect for adding a burst of to your day.', 'orange-drink.png', '2025-07-26 14:24:49', '2025-07-26 16:24:05', 1),
-(15, 'Dragon Fruit Mojito', 'Beverage', '760', 'Available', 'Experience a tropical twist with our Dragon Fruit Mojito, featuring exotic dragon fruit, mint, and lime, all muddled together.', 'Dragon-fruit-drink.png', '2025-07-26 14:25:57', '2025-07-26 16:24:54', 0),
-(16, 'Watermelon Smoothie', 'Beverage', '400', 'Available', 'A blend of juicy watermelon and a hint of lime, delivering a hydrating and deliciously fruity escape from the heat.', 'watermelon-drink.png', '2025-07-26 14:26:56', '2025-07-26 16:26:00', 0),
-(33, 'Garlic Bread', 'Appetizer', '350', 'Available', 'Golden, toasted bread topped with buttery garlic and herbs. Crispy and savory, perfect for starting your meal.', 'garlic-bread.avif', '2025-07-26 16:37:43', '2025-07-26 22:07:43', 1),
-(34, 'Chicken Wing', 'Appetizer', '480', 'Available', 'Tender, juicy chicken wings tossed in your choice of flavorful sauces. Perfectly crispy on the outside and succulent on the inside.', 'chicken-wing.avif', '2025-07-26 16:43:59', '2025-07-26 22:13:59', 0),
-(35, 'Samosa', 'Appetizer', '120', 'Available', 'Crispy, golden-brown samosas filled with a savory blend of spiced potatoes and peas.', 'samosa.avif', '2025-07-26 16:45:44', '2025-07-26 22:15:44', 0);
 
 -- --------------------------------------------------------
 
